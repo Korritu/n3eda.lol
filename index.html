@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Тайлер | Official</title>
+  <meta name="description" content="Тайлер — Official artist website. New single 'Я живой… Я иду к тебе' out December 16, 2025.">
+  
+  <!-- Spotify Artist Verification Meta Tags -->
+  <link rel="canonical" href="https://tayler-official.netlify.app" />
+  <meta property="og:title" content="Тайлер">
+  <meta property="og:description" content="Official website of Тайлер. Stream 'Я живой… Я иду к тебе' on Spotify.">
+  <meta property="og:type" content="music.musician">
+  <meta property="og:url" content="https://tayler-official.netlify.app">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Тайлер | Official">
+  
+  <!-- Fonts - Using a bold condensed font similar to cover -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg: #000000;
+      --text: #ffffff;
+      --text-dim: rgba(255, 255, 255, 0.35);
+      --text-muted: rgba(255, 255, 255, 0.15);
+      --glow: rgba(255, 255, 255, 0.8);
+      --glow-soft: rgba(255, 255, 255, 0.2);
+      --spotify: #1DB954;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      cursor: none;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', -apple-system, sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* Custom White Cursor */
+    .cursor {
+      width: 24px;
+      height: 24px;
+      border: 2px solid var(--text);
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      transition: transform 0.2s ease, background 0.2s ease, opacity 0.2s ease;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.5), 0 0 40px rgba(255, 255, 255, 0.2);
+      mix-blend-mode: difference;
+    }
+
+    .cursor.hover {
+      transform: translate(-50%, -50%) scale(1.8);
+      background: var(--text);
+      box-shadow: 0 0 30px rgba(255, 255, 255, 0.8), 0 0 60px rgba(255, 255, 255, 0.4);
+    }
+
+    .cursor-dot {
+      width: 4px;
+      height: 4px;
+      background: var(--text);
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+    }
+
+    /* Background glow orbs - white */
+    .bg-glow {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(100px);
+    }
+
+    .orb-1 {
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.04) 0%, transparent 70%);
+      top: -30%;
+      left: 50%;
+      transform: translateX(-50%);
+      animation: breathe 10s ease-in-out infinite;
+    }
+
+    .orb-2 {
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.03) 0%, transparent 70%);
+      bottom: -20%;
+      left: 50%;
+      transform: translateX(-50%);
+      animation: breathe 12s ease-in-out infinite reverse;
+    }
+
+    @keyframes breathe {
+      0%, 100% { opacity: 0.5; transform: translateX(-50%) scale(1); }
+      50% { opacity: 1; transform: translateX(-50%) scale(1.2); }
+    }
+
+    /* Noise texture */
+    .noise {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 998;
+      opacity: 0.05;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    }
+
+    /* Vignette effect */
+    .vignette {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 997;
+      background: radial-gradient(ellipse at center, transparent 0%, transparent 50%, rgba(0,0,0,0.4) 100%);
+    }
+
+    /* Main container */
+    .container {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 24px;
+      text-align: center;
+    }
+
+    /* Artist Name - matching cover style */
+    .artist-name {
+      font-family: 'Oswald', sans-serif;
+      font-size: clamp(4rem, 18vw, 12rem);
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      line-height: 1;
+      color: var(--text);
+      text-transform: uppercase;
+      margin-bottom: 60px;
+      text-shadow: 
+        0 0 40px rgba(255, 255, 255, 0.5),
+        0 0 80px rgba(255, 255, 255, 0.3),
+        0 0 120px rgba(255, 255, 255, 0.15);
+      animation: fadeIn 1.5s ease-out, glowPulse 5s ease-in-out infinite;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes glowPulse {
+      0%, 100% { 
+        text-shadow: 
+          0 0 40px rgba(255, 255, 255, 0.5),
+          0 0 80px rgba(255, 255, 255, 0.3),
+          0 0 120px rgba(255, 255, 255, 0.15);
+      }
+      50% { 
+        text-shadow: 
+          0 0 60px rgba(255, 255, 255, 0.7),
+          0 0 100px rgba(255, 255, 255, 0.4),
+          0 0 150px rgba(255, 255, 255, 0.2);
+      }
+    }
+
+    /* Album Section */
+    .album-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 50px;
+      animation: fadeIn 1.5s ease-out 0.3s both;
+    }
+
+    .release-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      border: 1px solid var(--text-dim);
+      border-radius: 100px;
+      padding: 10px 24px;
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 40px;
+    }
+
+    .release-tag::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      background: var(--text);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--text), 0 0 20px var(--text);
+      animation: pulse 2.5s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    .album-artwork {
+      width: 320px;
+      height: 320px;
+      margin-bottom: 40px;
+      position: relative;
+      animation: float 8s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
+    }
+
+    .album-artwork::before {
+      content: '';
+      position: absolute;
+      inset: -3px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.3), transparent, rgba(255,255,255,0.1));
+      border-radius: 6px;
+      z-index: -1;
+      animation: borderGlow 4s ease-in-out infinite;
+    }
+
+    @keyframes borderGlow {
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 1; }
+    }
+
+    .album-artwork::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      box-shadow: 
+        0 0 60px rgba(255, 255, 255, 0.15),
+        0 30px 60px rgba(0, 0, 0, 0.5);
+      border-radius: 4px;
+      pointer-events: none;
+    }
+
+    .album-artwork img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      border-radius: 4px;
+    }
+
+    .track-title {
+      font-family: 'Oswald', sans-serif;
+      font-size: clamp(1.5rem, 5vw, 2.5rem);
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      line-height: 1.3;
+      margin-bottom: 10px;
+      text-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+    }
+
+    .track-meta {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    /* Buttons */
+    .actions {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      width: 100%;
+      max-width: 380px;
+      animation: fadeIn 1.5s ease-out 0.6s both;
+    }
+
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 20px 32px;
+      border-radius: 4px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+      cursor: none;
+      letter-spacing: 0.05em;
+    }
+
+    .btn-spotify {
+      background: var(--text);
+      color: var(--bg);
+      box-shadow: 
+        0 0 30px rgba(255, 255, 255, 0.3),
+        0 0 60px rgba(255, 255, 255, 0.1);
+    }
+
+    .btn-spotify::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(0,0,0,0.1), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .btn-spotify:hover::before {
+      left: 100%;
+    }
+
+    .btn-spotify:hover {
+      transform: translateY(-3px);
+      box-shadow: 
+        0 0 50px rgba(255, 255, 255, 0.5),
+        0 0 100px rgba(255, 255, 255, 0.2),
+        0 20px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    .btn-spotify svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    .btn-contact {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--text-muted);
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .btn-contact:hover {
+      border-color: var(--text-dim);
+      background: rgba(255, 255, 255, 0.03);
+      transform: translateY(-2px);
+      box-shadow: 0 0 40px rgba(255, 255, 255, 0.1);
+    }
+
+    .btn-contact .label {
+      font-size: 0.65rem;
+      font-weight: 400;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+
+    .btn-contact .email {
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    /* Footer */
+    footer {
+      margin-top: 80px;
+      animation: fadeIn 1.5s ease-out 0.9s both;
+    }
+
+    .footer-line {
+      width: 40px;
+      height: 1px;
+      background: var(--text-muted);
+      margin: 0 auto 25px;
+    }
+
+    footer p {
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      line-height: 2;
+      letter-spacing: 0.1em;
+    }
+
+    footer a {
+      color: var(--text);
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+
+    footer a:hover {
+      text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .cursor, .cursor-dot {
+        display: none;
+      }
+
+      body, html, .btn {
+        cursor: auto;
+      }
+
+      .container {
+        padding: 50px 20px;
+      }
+
+      .artist-name {
+        margin-bottom: 50px;
+      }
+
+      .album-artwork {
+        width: 280px;
+        height: 280px;
+      }
+    }
+
+    @media (max-width: 400px) {
+      .album-artwork {
+        width: 240px;
+        height: 240px;
+      }
+
+      .actions {
+        max-width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Custom Cursor -->
+  <div class="cursor"></div>
+  <div class="cursor-dot"></div>
+
+  <!-- Background Effects -->
+  <div class="bg-glow">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+  </div>
+  <div class="vignette"></div>
+  <div class="noise"></div>
+
+  <div class="container">
+    
+    <h1 class="artist-name">Тайлер</h1>
+
+    <section class="album-section">
+      <div class="release-tag">Новый сингл — 16 декабря 2025</div>
+      
+      <div class="album-artwork">
+        <img src="data:image/webp;base64,UklGRgIPAABXRUJQVlA4WAoAAAAgAAAA5wMA5wMASUNDUMgBAAAAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADZWUDggFA0AALD1AJ0BKugD6AM+USiTRyOioaEgNmgIcAoJaW7hd2Eb85npB2pf2L8eP2c7Zzxd66Zxf6xfXfyY/Lf2YOAC/G/45/hPyg/JzkoOV/1n/dcaH1c/yHqc/mH955Anu/2A/5L/TP91/X/yI+Mr/V/yXno/M/8R/3P8r8Bf8s/r//A7BXoG/qIAZ7kPfbJyHvtk5D32ych77ZOQ99snIe+2TkPfbJyHvtk5D32ych77ZOQ99snIe+2TkPfbJyHvtk5D32ych77ZOQ99snIe+2TkPfbJyHvtk5D32ych77ZOQ99snIe+2TkPfbJyHvtk5D32ych77ZOQ99snIe+2TkPfbJyHvtk5D32ych77ZOQ99snIe+2TkPfbJyHvtk5D32ych77ZOQ99snIe+2TkPfbJyHvtk5D32ych77ZOQ99snIe+2TkPfbJyHvtk5D32ych77ZOQ99snIe+2TkPfbJyHvtk5D32ych77ZOQ99snIe+2TkPfbJyHvtk5D32ych77ZOQ99snIe+2TkPfbJyHvtk5D32ych77ZOQ99snIe+2TkPfbJyHvtk5D32ych77ZOQ99snIe+2TkPfbJyHvtk5D32ych77ZOQ99snIe+2TkPfbJyHvtk5D32ych77ZOQ99snIe+2TkPfbJyHvtk5D32ych77ZOQ99snIe+2TkPfbJyHvtk5D32ych77ZOQ99snIe+2TkPfbJyHvtk5D32ych77ZOQ99snIe+2TkPfbJyHvtk5D32ych77ZOQ99snIe+2TkPfbJyHvtk5D32ych77ZOQ99snIe+2TkPfbJyHvtk5D32ych77ZOQ99snIe+2TkPfbJyHvtk5D32ych77ZOQ99snIe+2TkPfbJyHvtk5D32ych77ZOQ99snIe+2TkPfbJyHvtk5D32ych77ZOQ99snIe+2TkPfbJyHvtk5D32ych77ZOQ99snIe+2TkPfbJyHvtk5D32ych77ZOQ99snIe+2TkPfbJyHvtk5D32ych77ZOQ99snIe+2TkPfbJyHvtk5D32ych77ZOQ99snIe+2TkPfbJyHvtk5D32ych77ZOQ99snIe+2TkPfbJyHvtk5D32ych77ZOQ99snIe+2TkPfbJyHvtk5D32ych77ZOQ99snIe+2TkPfbJyHvrCadKATQZ00Jk8sz8J4hMXaVAsl2vFych77ZOQ99snIe+2TkPfbJx/FWke5SVD52HOkP7+jZizBB85knfgqwqiIEGFOwf2IURnht0HoH4bYqUj2hJ/EVBfURcnIe+2TkPfbJyHvtk5D32ych77ZOP4pISK093xkAoOhbzvPUoERwSEECWclXFF0tjAjsjEEI3ooO5aAuJ2v7vDRigKWgiNAZPJyHvtk5D32ych77ZOQ99snIe+2TkN5bxgChEDEXIgC6MAxSPngFMlgCxnfAV850oKZio4tXJyHvtk5D32ych77ZOQ99snIe+2TkPfxLxDmEu0qBZLteLk5D32ych77ZOQ99snIe+2TkPfbJyHvtk5D32ych77ZOQ99snIe+2TkPfbJyHvtk5D32ych77ZOQ99snIe+2TkPfbJyHvtk5D32ych77ZOQ99snIe+2TkPfbJyHvtk5D32ych77ZOQ99snIe+2TkPfbJyHvtk5D32ych77ZOQ99snIe+2TkPfbJyHvtk5D32ych77ZOQ99snIe+2TkPfbJyHvtk5D32ych77ZOQ99snIe+2TkPfbJyHvt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" alt="Я живой… Я иду к тебе">
+      </div>
+      
+      <h2 class="track-title">Я живой… Я иду к тебе</h2>
+      <p class="track-meta">Сингл • 2025</p>
+    </section>
+
+    <div class="actions">
+      <a href="https://open.spotify.com/artist/YOUR_SPOTIFY_ARTIST_ID" class="btn btn-spotify" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/>
+        </svg>
+        Слушать на Spotify
+      </a>
+      
+      <a href="mailto:zedonmarkway@gmail.com" class="btn btn-contact">
+        <span class="label">Сотрудничество</span>
+        <span class="email">zedonmarkway@gmail.com</span>
+      </a>
+    </div>
+
+    <footer>
+      <div class="footer-line"></div>
+      <p>
+        Официальный сайт <a href="https://open.spotify.com/artist/YOUR_SPOTIFY_ARTIST_ID" target="_blank" rel="noopener">Тайлер</a>
+      </p>
+      <p>© 2025 Тайлер</p>
+    </footer>
+
+  </div>
+
+  <!-- Custom Cursor Script -->
+  <script>
+    const cursor = document.querySelector('.cursor');
+    const cursorDot = document.querySelector('.cursor-dot');
+    const links = document.querySelectorAll('a, button');
+
+    let mouseX = 0, mouseY = 0;
+    let cursorX = 0, cursorY = 0;
+
+    document.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      cursorDot.style.left = mouseX + 'px';
+      cursorDot.style.top = mouseY + 'px';
+    });
+
+    function animate() {
+      cursorX += (mouseX - cursorX) * 0.12;
+      cursorY += (mouseY - cursorY) * 0.12;
+      cursor.style.left = cursorX + 'px';
+      cursor.style.top = cursorY + 'px';
+      requestAnimationFrame(animate);
+    }
+    animate();
+
+    links.forEach(link => {
+      link.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+      link.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+    });
+
+    document.addEventListener('mouseleave', () => {
+      cursor.style.opacity = '0';
+      cursorDot.style.opacity = '0';
+    });
+    
+    document.addEventListener('mouseenter', () => {
+      cursor.style.opacity = '1';
+      cursorDot.style.opacity = '1';
+    });
+  </script>
+</body>
+</html>
